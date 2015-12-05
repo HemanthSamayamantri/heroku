@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shorten -- Shooter</title>
+	
+	<script type="text/javascript">
+	 var final;
+	 var sendURL;
+	 var shortURL = function postURL (callback){
+	    
+	     var url = document.getElementById('url').value;
+		 console.log("URL is", url);
+		 var ur2 = "http://Team7CP-1756060665.us-east-1.elb.amazonaws.com:80/shortenURL/";
+		 var final =ur2.concat(url);
+		 console.log("Final url is", final);
+		
+		  var xmlHttp = new XMLHttpRequest();
+		  xmlHttp.open( "GET", final, false ); // false for synchronous request
+		  xmlHttp.send();
+		  var response = xmlHttp.responseText;
+		  var noQuotes = response.split('"').join('');
+		  var lburl = "http://Team7LR-1363407384.us-east-1.elb.amazonaws.com/";
+		  final = lburl.concat(noQuotes);
+		  document.getElementById('shorturl').value= final;
+		  return final;
+	  }
+	   function sendURL() {
+		return shortURL();
+	  }
+	  
+	</script>
+	
+  </head>
+  <body>
+	<div class="container">
+	  <form onsubmit="return false;">
+		<fieldset>
+		  <legend>Shorten</legend>
+		  <label>URL</label>
+		  <input name= "url" id= "url" type="text" class= "span8" placeholder="Type url starts with http/https/ftp...">
+		  <button type="submit" class="btn" onclick='sendURL();'>Submit</button>
+		</fieldset>
+	  </form>
+	  <div id='error' class="alert alert-error" style='display:none'>
+		<% if (locals.error){ %>
+		<%= error %>
+		<% } %>
+	  </div>
+	  <div class="alert alert-success" style='display:none' id='success'>
+	  </div>
+	</div>
+	<br />
+	<br />
+	<br />
+	<p>Shortened URL:
+	<br />
+		<output type="text" name="blah" id="shorturl"/>
+		
+		
+	<br/>
+	</p>
+   
+	<script type="text/javascript">
+	  <% if (locals.error) { %>
+	  $('#error').show(0.5);
+      <% } %>
+	</script>
+	<div>
+  </body>
+</html>
